@@ -20,7 +20,15 @@ app.use(
   }),
 );
 app.use(compression());
-app.use(express.json({ limit: '1mb' }));
+app.use(
+  express.json({
+    limit: '1mb',
+    verify: (req, _res, buf) => {
+      // Preserve raw body for Retell (and future) webhook signature verification.
+      req.rawBody = buf.toString('utf8');
+    },
+  }),
+);
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
