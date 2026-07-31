@@ -1,0 +1,47 @@
+{
+  "name": "clinic-voice-ai-backend",
+  "version": "1.0.0",
+  "description": "Production-grade AI Voice Receptionist backend for medical clinics",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write \"src/**/*.js\"",
+    "format:check": "prettier --check \"src/**/*.js\"",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [
+    "voice-ai",
+    "medical",
+    "receptionist",
+    "express",
+    "prisma"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.12.0",
+    "compression": "^1.8.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-node": "^11.1.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
+    "prisma": "^6.12.0"
+  }
+}
