@@ -7,4 +7,599 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Database models will be added in future iterations.
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+enum SlotStatus {
+  AVAILABLE
+  HELD
+  BOOKED
+  BLOCKED
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+  NO_SHOW
+}
+
+enum AppointmentSource {
+  VOICE_AI
+  MANUAL
+  CLINIKO
+  WEB
+}
+
+enum CallSessionStatus {
+  IN_PROGRESS
+  COMPLETED
+  DROPPED
+  TRANSFERRED
+  FAILED
+}
+
+enum CallDirection {
+  INBOUND
+  OUTBOUND
+}
+
+enum CallbackStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
+enum CallbackReason {
+  DROPPED_CALL
+  MISSED_OUTBOUND
+  PATIENT_REQUESTED
+  FOLLOW_UP
+  OTHER
+}
+
+enum SyncEntityType {
+  BRANCH
+  DEPARTMENT
+  DOCTOR
+  PATIENT
+  APPOINTMENT
+  SLOT
+}
+
+enum SyncStatus {
+  PENDING
+  IN_PROGRESS
+  SUCCESS
+  FAILED
+  CONFLICT
+}
+
+enum SyncDirection {
+  INBOUND
+  OUTBOUND
+  BIDIRECTIONAL
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  BOOK
+  RESCHEDULE
+  CANCEL
+  HOLD
+  RELEASE
+  SYNC
+  CALLBACK
+  RECOVER_SESSION
+  OTHER
+}
+
+enum ActorType {
+  SYSTEM
+  VOICE_AI
+  ADMIN
+  PATIENT
+  CLINIKO
+  WEBHOOK
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+  UNKNOWN
+}
+
+// ---------------------------------------------------------------------------
+// Clinic structure
+// ---------------------------------------------------------------------------
+
+model Clinic {
+  id        String   @id @default(cuid())
+  name      String
+  code      String   @unique
+  phone     String?
+  email     String?
+  website   String?
+  timezone  String   @default("Asia/Kolkata")
+  country   String   @default("IN")
+  currency  String   @default("INR")
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  branches Branch[]
+  settings ClinicSettings?
+
+  @@index([isActive])
+  @@map("clinics")
+}
+
+model ClinicSettings {
+  id                       String   @id @default(cuid())
+  clinicId                 String   @unique
+  appointmentBufferMinutes Int      @default(5)
+  slotHoldMinutes          Int      @default(3)
+  cancellationWindowHours  Int      @default(24)
+  rescheduleWindowHours    Int      @default(24)
+  currency                 String   @default("INR")
+  timezone                 String   @default("Asia/Kolkata")
+  allowWalkIns             Boolean  @default(false)
+  createdAt                DateTime @default(now())
+  updatedAt                DateTime @updatedAt
+
+  clinic Clinic @relation(fields: [clinicId], references: [id], onDelete: Cascade)
+
+  @@map("clinic_settings")
+}
+
+model Branch {
+  id           String   @id @default(cuid())
+  clinicId     String
+  name         String
+  code         String   @unique
+  addressLine1 String?
+  addressLine2 String?
+  city         String?
+  state        String?
+  postalCode   String?
+  country      String?  @default("IN")
+  phone        String?
+  timezone     String   @default("Asia/Kolkata")
+  clinikoId    String?  @unique
+  isActive     Boolean  @default(true)
+  metadata     Json?
+  deletedAt    DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  clinic             Clinic                    @relation(fields: [clinicId], references: [id], onDelete: Restrict)
+  departments        Department[]
+  doctorBranches     DoctorBranch[]
+  doctorSchedules    DoctorSchedule[]
+  scheduleExceptions DoctorScheduleException[]
+  appointmentSlots   AppointmentSlot[]
+  appointments       Appointment[]
+  callSessions       CallSession[]
+  callbackRequests   CallbackRequest[]
+
+  @@index([clinicId, isActive])
+  @@index([isActive])
+  @@index([city])
+  @@map("branches")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  branchId    String?
+  name        String
+  code        String
+  description String?
+  clinikoId   String?  @unique
+  isActive    Boolean  @default(true)
+  metadata    Json?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  branch            Branch?            @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  doctorDepartments DoctorDepartment[]
+  appointments      Appointment[]
+
+  @@unique([branchId, code])
+  @@index([isActive])
+  @@index([name])
+  @@map("departments")
+}
+
+model Doctor {
+  id          String   @id @default(cuid())
+  firstName   String
+  lastName    String
+  displayName String
+  email       String?  @unique
+  phone       String?
+  title       String?
+  clinikoId   String?  @unique
+  isActive    Boolean  @default(true)
+  metadata    Json?
+  deletedAt   DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  doctorBranches     DoctorBranch[]
+  doctorDepartments  DoctorDepartment[]
+  schedules          DoctorSchedule[]
+  scheduleExceptions DoctorScheduleException[]
+  appointmentSlots   AppointmentSlot[]
+  appointments       Appointment[]
+
+  @@index([lastName, firstName])
+  @@index([isActive])
+  @@index([displayName])
+  @@map("doctors")
+}
+
+/// Many-to-many: doctors can practice at multiple branches.
+model DoctorBranch {
+  id        String   @id @default(cuid())
+  doctorId  String
+  branchId  String
+  isPrimary Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([doctorId, branchId])
+  @@index([branchId])
+  @@index([doctorId, isActive])
+  @@map("doctor_branches")
+}
+
+/// Many-to-many: doctors can belong to multiple departments/specializations.
+model DoctorDepartment {
+  id           String   @id @default(cuid())
+  doctorId     String
+  departmentId String
+  isPrimary    Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  doctor     Doctor     @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  department Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([doctorId, departmentId])
+  @@index([departmentId])
+  @@index([doctorId, isActive])
+  @@map("doctor_departments")
+}
+
+// ---------------------------------------------------------------------------
+// Scheduling & availability
+// ---------------------------------------------------------------------------
+
+/// Recurring weekly working hours for a doctor at a branch.
+model DoctorSchedule {
+  id            String    @id @default(cuid())
+  doctorId      String
+  branchId      String
+  dayOfWeek     DayOfWeek
+  startTime     String /// HH:mm in branch local time
+  endTime       String /// HH:mm in branch local time
+  slotDuration  Int       @default(15) /// minutes
+  isActive      Boolean   @default(true)
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([doctorId, branchId, dayOfWeek, startTime, endTime])
+  @@index([doctorId, branchId, dayOfWeek, isActive])
+  @@index([branchId, dayOfWeek])
+  @@map("doctor_schedules")
+}
+
+/// One-off overrides: leave, holidays, extra clinics, shortened days.
+model DoctorScheduleException {
+  id        String   @id @default(cuid())
+  doctorId  String
+  branchId  String
+  date      DateTime @db.Date
+  isDayOff  Boolean  @default(false)
+  startTime String? /// HH:mm when partially available
+  endTime   String?
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([doctorId, branchId, date])
+  @@index([doctorId, date])
+  @@index([branchId, date])
+  @@map("doctor_schedule_exceptions")
+}
+
+/// Concrete bookable inventory. Schema-level double-booking prevention via unique slot + booking rules.
+model AppointmentSlot {
+  id              String     @id @default(cuid())
+  doctorId        String
+  branchId        String
+  startsAt        DateTime
+  endsAt             DateTime
+  status             SlotStatus @default(AVAILABLE)
+  bufferAfterMinutes Int        @default(5)
+  holdExpiresAt      DateTime? /// temporary hold during voice conversation
+  heldBySessionId    String?
+  clinikoId          String?    @unique
+  metadata           Json?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  doctor        Doctor       @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  branch        Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  appointment   Appointment?
+  heldBySession CallSession? @relation("SlotHeldBySession", fields: [heldBySessionId], references: [id], onDelete: SetNull)
+
+  @@unique([doctorId, startsAt])
+  @@index([branchId, startsAt, status])
+  @@index([doctorId, startsAt, status])
+  @@index([status, holdExpiresAt])
+  @@index([heldBySessionId])
+  @@map("appointment_slots")
+}
+
+// ---------------------------------------------------------------------------
+// Patients & appointments
+// ---------------------------------------------------------------------------
+
+model Patient {
+  id                String    @id @default(cuid())
+  firstName         String
+  lastName          String
+  fullName          String
+  phone             String
+  phoneE164         String? /// normalized E.164 for reliable lookup
+  email             String?
+  dateOfBirth       DateTime? @db.Date
+  gender            Gender    @default(UNKNOWN)
+  preferredLanguage String?   @default("en")
+  clinikoId         String?   @unique
+  isReturning       Boolean   @default(false)
+  notes             String?
+  metadata          Json?
+  deletedAt         DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  appointments     Appointment[]
+  callSessions     CallSession[]
+  callbackRequests CallbackRequest[]
+
+  @@unique([phoneE164])
+  @@index([phone])
+  @@index([fullName])
+  @@index([lastName, firstName])
+  @@index([phone, lastName])
+  @@map("patients")
+}
+
+model Appointment {
+  id                 String            @id @default(cuid())
+  patientId          String
+  doctorId           String
+  branchId           String
+  departmentId       String?
+  slotId             String            @unique /// 1:1 with slot — prevents double booking
+  status             AppointmentStatus @default(PENDING)
+  source             AppointmentSource @default(VOICE_AI)
+  startsAt           DateTime
+  endsAt             DateTime
+  visitReason        String?
+  notes              String?
+  cancellationReason String?
+  cancelledAt        DateTime?
+  rescheduledFromId  String? /// previous appointment when rescheduled
+  callSessionId      String?
+  clinikoId          String?           @unique
+  idempotencyKey     String?           @unique /// client/voice request idempotency
+  metadata           Json?
+  deletedAt          DateTime?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  patient         Patient         @relation(fields: [patientId], references: [id], onDelete: Restrict)
+  doctor          Doctor          @relation(fields: [doctorId], references: [id], onDelete: Restrict)
+  branch          Branch          @relation(fields: [branchId], references: [id], onDelete: Restrict)
+  department      Department?     @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  slot            AppointmentSlot @relation(fields: [slotId], references: [id], onDelete: Restrict)
+  rescheduledFrom Appointment?    @relation("AppointmentReschedule", fields: [rescheduledFromId], references: [id], onDelete: SetNull)
+  rescheduledTo   Appointment[]   @relation("AppointmentReschedule")
+  callSession     CallSession?    @relation(fields: [callSessionId], references: [id], onDelete: SetNull)
+
+  @@index([patientId, startsAt])
+  @@index([doctorId, startsAt])
+  @@index([branchId, startsAt])
+  @@index([status, startsAt])
+  @@index([callSessionId])
+  @@index([rescheduledFromId])
+  @@index([departmentId])
+  @@map("appointments")
+}
+
+// ---------------------------------------------------------------------------
+// Voice conversations & callbacks
+// ---------------------------------------------------------------------------
+
+model CallSession {
+  id                String            @id @default(cuid())
+  branchId          String?
+  patientId         String?
+  externalCallId    String?           @unique /// Retell / telephony provider call id
+  direction         CallDirection     @default(INBOUND)
+  status            CallSessionStatus @default(IN_PROGRESS)
+  language          String?           @default("en")
+  fromNumber        String?
+  toNumber          String?
+  startedAt         DateTime          @default(now())
+  endedAt           DateTime?
+  droppedAt         DateTime?
+  lastActivityAt    DateTime          @default(now())
+  recoveryToken     String?           @unique /// resume dropped conversations
+  conversationState Json? /// structured dialog state for recovery
+  currentIntent     String?
+  currentStep       String?
+  promptVersion     String?
+  modelVersion      String?
+  transcript        Json? /// ordered transcript turns
+  summary           String?
+  metadata          Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  branch           Branch?           @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  patient          Patient?          @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  appointments     Appointment[]
+  heldSlots        AppointmentSlot[] @relation("SlotHeldBySession")
+  callbackRequests CallbackRequest[]
+
+  @@index([status, lastActivityAt])
+  @@index([patientId])
+  @@index([branchId, startedAt])
+  @@index([fromNumber])
+  @@index([droppedAt])
+  @@map("call_sessions")
+}
+
+model CallbackRequest {
+  id            String         @id @default(cuid())
+  patientId     String?
+  branchId      String?
+  callSessionId String?
+  phone         String
+  phoneE164     String?
+  reason        CallbackReason @default(DROPPED_CALL)
+  status        CallbackStatus @default(PENDING)
+  priority      Int            @default(0)
+  attemptCount  Int            @default(0)
+  maxAttempts   Int            @default(3)
+  nextAttemptAt DateTime?
+  lastAttemptAt DateTime?
+  completedAt   DateTime?
+  failedAt      DateTime?
+  notes         String?
+  metadata      Json?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  patient     Patient?     @relation(fields: [patientId], references: [id], onDelete: SetNull)
+  branch      Branch?      @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  callSession CallSession? @relation(fields: [callSessionId], references: [id], onDelete: SetNull)
+
+  @@index([status, nextAttemptAt])
+  @@index([phoneE164])
+  @@index([patientId])
+  @@index([callSessionId])
+  @@index([branchId, status])
+  @@map("callback_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Idempotency, Cliniko sync, audit
+// ---------------------------------------------------------------------------
+
+/// Ensures booking (and related) mutations can be safely retried by clients/voice tools.
+model IdempotencyRecord {
+  id             String    @id @default(cuid())
+  key            String    @unique
+  scope          String    @default("booking") /// e.g. booking | reschedule | cancel | callback
+  requestHash    String?
+  responseStatus Int?
+  responseBody   Json?
+  resourceType   String?
+  resourceId     String?
+  expiresAt      DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([scope, createdAt])
+  @@index([expiresAt])
+  @@index([resourceType, resourceId])
+  @@map("idempotency_records")
+}
+
+/// Tracks bidirectional sync state with Cliniko for each local entity.
+model ClinikoSync {
+  id              String         @id @default(cuid())
+  entityType      SyncEntityType
+  localId         String
+  clinikoId       String?
+  direction       SyncDirection  @default(BIDIRECTIONAL)
+  status          SyncStatus     @default(PENDING)
+  lastSyncedAt    DateTime?
+  lastAttemptAt   DateTime?
+  attemptCount    Int            @default(0)
+  payloadHash     String? /// detect remote/local drift
+  requestPayload  Json?
+  responsePayload Json?
+  errorMessage    String?
+  metadata        Json?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@unique([entityType, localId])
+  @@unique([entityType, clinikoId])
+  @@index([status, lastAttemptAt])
+  @@index([clinikoId])
+  @@index([entityType, status])
+  @@map("cliniko_sync")
+}
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  actorType     ActorType   @default(SYSTEM)
+  actorId       String?
+  action        AuditAction
+  entityType    String
+  entityId      String?
+  callSessionId String?
+  requestId     String?
+  ipAddress     String?
+  userAgent     String?
+  before        Json?
+  after         Json?
+  metadata      Json?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([action, createdAt])
+  @@index([actorType, actorId])
+  @@index([callSessionId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
