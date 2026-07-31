@@ -4,6 +4,7 @@ const patientRoutes = require('./patientRoutes');
 const doctorRoutes = require('./doctorRoutes');
 const availabilityRoutes = require('./availabilityRoutes');
 const appointmentRoutes = require('./appointmentRoutes');
+const branchRoutes = require('./branchRoutes');
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use('/api/v1/patients', patientRoutes);
 router.use('/api/v1/doctors', doctorRoutes);
 router.use('/api/v1/availability', availabilityRoutes);
 router.use('/api/v1/appointments', appointmentRoutes);
+router.use('/api/v1/branches', branchRoutes);
 
 module.exports = router;

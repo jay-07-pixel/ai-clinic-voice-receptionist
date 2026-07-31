@@ -1,0 +1,22 @@
+const LIST_DEFAULT_LIMIT = 50;
+const LIST_MAX_LIMIT = 100;
+const LIST_DEFAULT_OFFSET = 0;
+const DEFAULT_TIMEZONE = 'Asia/Kolkata';
+
+const DAY_OF_WEEK_ORDER = Object.freeze([
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
+  'SUNDAY',
+]);
+
+module.exports = {
+  LIST_DEFAULT_LIMIT,
+  LIST_MAX_LIMIT,
+  LIST_DEFAULT_OFFSET,
+  DEFAULT_TIMEZONE,
+  DAY_OF_WEEK_ORDER,
+};
