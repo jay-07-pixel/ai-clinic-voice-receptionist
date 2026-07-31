@@ -9,6 +9,10 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
+    'no-unused-vars': [
+      'error',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     'node/no-unpublished-require': 'off',
     'node/no-missing-require': 'off',
   },

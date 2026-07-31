@@ -16,7 +16,11 @@ function validateRequest(validator) {
     const { error, value } = validator(req);
 
     if (error) {
-      return next(new AppError(error, 400));
+      return next(
+        new AppError(error, 400, {
+          code: 'VALIDATION_ERROR',
+        }),
+      );
     }
 
     req.validated = value;

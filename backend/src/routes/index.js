@@ -1,11 +1,10 @@
 const express = require('express');
 const healthRoutes = require('./healthRoutes');
+const patientRoutes = require('./patientRoutes');
 
 const router = express.Router();
 
 router.use('/health', healthRoutes);
-
-// Future API routes will be mounted under /api
-// router.use('/api', apiRoutes);
+router.use('/api/v1/patients', patientRoutes);
 
 module.exports = router;
