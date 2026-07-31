@@ -1,0 +1,1558 @@
+{
+  "generatedAt": "2026-07-31T16:07:11.438Z",
+  "mode": "offline-simulation",
+  "summary": {
+    "scenarios": 12,
+    "passed": 12,
+    "failed": 0,
+    "successRate": 1
+  },
+  "metrics": {
+    "successRate": 1,
+    "turnsToCompletion": 3.25,
+    "averageToolCalls": 5,
+    "averageBookingTimeMs": 476.9,
+    "redundantQuestions": 0,
+    "backendLatencyMs": 36.76,
+    "toolLatencyMs": 50.05,
+    "retellEventLatencyMs": 25.64,
+    "clinikoSyncTimeMs": 69.4
+  },
+  "perLanguage": {
+    "english": {
+      "total": 10,
+      "passed": 10,
+      "successRate": 1,
+      "avgTurns": 2.9,
+      "avgToolCalls": 5,
+      "avgBookingTimeMs": 464.38,
+      "avgBackendLatencyMs": 36.9,
+      "avgToolLatencyMs": 49.69
+    },
+    "hindi": {
+      "total": 1,
+      "passed": 1,
+      "successRate": 1,
+      "avgTurns": 5,
+      "avgToolCalls": 5,
+      "avgBookingTimeMs": 553,
+      "avgBackendLatencyMs": 40.32,
+      "avgToolLatencyMs": 46.8
+    },
+    "mixed": {
+      "total": 1,
+      "passed": 1,
+      "successRate": 1,
+      "avgTurns": 5,
+      "avgToolCalls": 5,
+      "avgBookingTimeMs": 501,
+      "avgBackendLatencyMs": 31.79,
+      "avgToolLatencyMs": 56.81
+    }
+  },
+  "scenarios": [
+    {
+      "id": "english-booking",
+      "name": "English Booking",
+      "language": "en",
+      "category": "booking",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 506,
+        "bookingTimeMs": 506,
+        "avgToolLatencyMs": 49.864000000000004,
+        "avgBackendLatencyMs": 39.827999999999996,
+        "avgRetellEventLatencyMs": 29.928000000000004,
+        "clinikoSyncTimeMs": 39.91
+      },
+      "metrics": {
+        "turns": 5,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 506
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Hi, I need to book a doctor appointment for tomorrow.",
+          "toolCount": 0,
+          "tools": [],
+          "durationMs": 37,
+          "retellEventLatencyMs": 35.9,
+          "notes": "Intent capture only"
+        },
+        {
+          "index": 1,
+          "user": "My phone number is 9876543210.",
+          "toolCount": 1,
+          "tools": [
+            "findPatient"
+          ],
+          "durationMs": 101,
+          "retellEventLatencyMs": 29.36,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "My name is Rahul Sharma.",
+          "toolCount": 1,
+          "tools": [
+            "registerPatient"
+          ],
+          "durationMs": 105,
+          "retellEventLatencyMs": 29.73,
+          "notes": null
+        },
+        {
+          "index": 3,
+          "user": "Any general physician at Andheri branch is fine.",
+          "toolCount": 1,
+          "tools": [
+            "searchAvailability"
+          ],
+          "durationMs": 79,
+          "retellEventLatencyMs": 39.75,
+          "notes": null
+        },
+        {
+          "index": 4,
+          "user": "Please book the first available slot.",
+          "toolCount": 2,
+          "tools": [
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 139,
+          "retellEventLatencyMs": 14.9,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 68.65,
+            "backendLatencyMs": 52.9
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 54.46,
+            "backendLatencyMs": 49.37
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 26.02,
+            "backendLatencyMs": 35.12
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 51.34,
+            "backendLatencyMs": 25.77
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 48.85,
+            "backendLatencyMs": 35.98
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment booked for Rahul Sharma at Andheri."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment booked for Rahul Sharma at Andheri."
+      }
+    },
+    {
+      "id": "hindi-booking",
+      "name": "Hindi Booking",
+      "language": "hi",
+      "category": "booking",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 553,
+        "bookingTimeMs": 553,
+        "avgToolLatencyMs": 46.798,
+        "avgBackendLatencyMs": 40.318,
+        "avgRetellEventLatencyMs": 28.664000000000005,
+        "clinikoSyncTimeMs": 107.99
+      },
+      "metrics": {
+        "turns": 5,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 553
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "नमस्ते, मुझे डॉक्टर से मिलना है।",
+          "toolCount": 0,
+          "tools": [],
+          "durationMs": 49,
+          "retellEventLatencyMs": 39.92,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "मेरा नंबर नौ आठ सात छह पांच चार तीन दो एक शून्य है।",
+          "toolCount": 1,
+          "tools": [
+            "findPatient"
+          ],
+          "durationMs": 110,
+          "retellEventLatencyMs": 34.23,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "मेरा नाम प्रिया वर्मा है।",
+          "toolCount": 1,
+          "tools": [
+            "registerPatient"
+          ],
+          "durationMs": 51,
+          "retellEventLatencyMs": 18.26,
+          "notes": null
+        },
+        {
+          "index": 3,
+          "user": "कल सुबह का सबसे जल्दी स्लॉट चाहिए।",
+          "toolCount": 1,
+          "tools": [
+            "earliestAvailability"
+          ],
+          "durationMs": 90,
+          "retellEventLatencyMs": 23.73,
+          "notes": null
+        },
+        {
+          "index": 4,
+          "user": "हाँ, बुक कर दीजिए।",
+          "toolCount": 2,
+          "tools": [
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 138,
+          "retellEventLatencyMs": 27.18,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 70.37,
+            "backendLatencyMs": 49.71
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 20.61,
+            "backendLatencyMs": 42.09
+          }
+        },
+        {
+          "name": "earliestAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 48.55,
+            "backendLatencyMs": 51.63
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 39.4,
+            "backendLatencyMs": 39.46
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 55.06,
+            "backendLatencyMs": 18.7
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "hi",
+        "summary": "प्रिया वर्मा के लिए अपॉइंटमेंट बुक हुई।"
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "hi",
+        "summary": "प्रिया वर्मा के लिए अपॉइंटमेंट बुक हुई।"
+      }
+    },
+    {
+      "id": "mixed-hindi-english-booking",
+      "name": "Mixed Hindi-English Booking",
+      "language": "mixed",
+      "category": "booking",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 501,
+        "bookingTimeMs": 501,
+        "avgToolLatencyMs": 56.80800000000001,
+        "avgBackendLatencyMs": 31.792,
+        "avgRetellEventLatencyMs": 22.418,
+        "clinikoSyncTimeMs": 38.03
+      },
+      "metrics": {
+        "turns": 5,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 501
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Hello ji, mujhe appointment book karni hai.",
+          "toolCount": 0,
+          "tools": [],
+          "durationMs": 31,
+          "retellEventLatencyMs": 18.97,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Phone number hai +91 9988776655.",
+          "toolCount": 1,
+          "tools": [
+            "findPatient"
+          ],
+          "durationMs": 89,
+          "retellEventLatencyMs": 24.83,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Mera naam Amit Patel hai.",
+          "toolCount": 1,
+          "tools": [
+            "registerPatient"
+          ],
+          "durationMs": 113,
+          "retellEventLatencyMs": 28.71,
+          "notes": null
+        },
+        {
+          "index": 3,
+          "user": "Bandra branch pe dermatologist chahiye, kal ke liye.",
+          "toolCount": 1,
+          "tools": [
+            "searchAvailability"
+          ],
+          "durationMs": 80,
+          "retellEventLatencyMs": 17.75,
+          "notes": null
+        },
+        {
+          "index": 4,
+          "user": "Haan book kar do please.",
+          "toolCount": 2,
+          "tools": [
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 142,
+          "retellEventLatencyMs": 21.83,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 52.78,
+            "backendLatencyMs": 55.67
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 79.32,
+            "backendLatencyMs": 26.69
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 48.43,
+            "backendLatencyMs": 15.76
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 36.2,
+            "backendLatencyMs": 36.81
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 67.31,
+            "backendLatencyMs": 24.03
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "mixed",
+        "summary": "Amit Patel booked at Bandra dermatology."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "mixed",
+        "summary": "Amit Patel booked at Bandra dermatology."
+      }
+    },
+    {
+      "id": "returning-patient",
+      "name": "Returning Patient",
+      "language": "en",
+      "category": "booking",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 372,
+        "bookingTimeMs": 372,
+        "avgToolLatencyMs": 54.4675,
+        "avgBackendLatencyMs": 40.1375,
+        "avgRetellEventLatencyMs": 24.33666666666667,
+        "clinikoSyncTimeMs": 37.29
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 4,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 372
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Hi, I am a returning patient. My number is 9123456780.",
+          "toolCount": 1,
+          "tools": [
+            "findPatient"
+          ],
+          "durationMs": 117,
+          "retellEventLatencyMs": 38.39,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Book me with Dr. Mehta tomorrow afternoon.",
+          "toolCount": 1,
+          "tools": [
+            "searchAvailability"
+          ],
+          "durationMs": 84,
+          "retellEventLatencyMs": 22.25,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Yes, confirm that slot.",
+          "toolCount": 2,
+          "tools": [
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 125,
+          "retellEventLatencyMs": 12.37,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 71.71,
+            "backendLatencyMs": 56.61
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 56.35,
+            "backendLatencyMs": 36.56
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 68.09,
+            "backendLatencyMs": 15.7
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 21.72,
+            "backendLatencyMs": 51.68
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Returning patient Sneha Iyer booked with Dr. Mehta."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Returning patient Sneha Iyer booked with Dr. Mehta."
+      }
+    },
+    {
+      "id": "dropped-call-recovery",
+      "name": "Dropped Call Recovery",
+      "language": "en",
+      "category": "recovery",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 280,
+        "bookingTimeMs": 280,
+        "avgToolLatencyMs": 43.99333333333334,
+        "avgBackendLatencyMs": 37.17333333333334,
+        "avgRetellEventLatencyMs": 19.863333333333333,
+        "clinikoSyncTimeMs": 81.97
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 3,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 280
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "[SYSTEM] Prior call dropped during booking confirmation.",
+          "toolCount": 1,
+          "tools": [
+            "saveConversation"
+          ],
+          "durationMs": 70,
+          "retellEventLatencyMs": 10.99,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Sorry, the call dropped. I am calling back.",
+          "toolCount": 1,
+          "tools": [
+            "resumeCall"
+          ],
+          "durationMs": 54,
+          "retellEventLatencyMs": 13.47,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Yes, please finish the booking for the same slot.",
+          "toolCount": 1,
+          "tools": [
+            "bookAppointment"
+          ],
+          "durationMs": 73,
+          "retellEventLatencyMs": 35.13,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "saveConversation",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 58.09,
+            "backendLatencyMs": 50.19
+          }
+        },
+        {
+          "name": "resumeCall",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 40.11,
+            "backendLatencyMs": 21.06
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 33.78,
+            "backendLatencyMs": 40.27
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": true,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Dropped call recovered and booking completed."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": true,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Dropped call recovered and booking completed."
+      }
+    },
+    {
+      "id": "missed-callback-resume",
+      "name": "Missed Callback Resume",
+      "language": "en",
+      "category": "callback",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 437,
+        "bookingTimeMs": 437,
+        "avgToolLatencyMs": 52.681999999999995,
+        "avgBackendLatencyMs": 34.702,
+        "avgRetellEventLatencyMs": 19.88,
+        "clinikoSyncTimeMs": 56.45
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 437
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "[SYSTEM] Inbound call missed / dropped without booking.",
+          "toolCount": 1,
+          "tools": [
+            "createCallback"
+          ],
+          "durationMs": 60,
+          "retellEventLatencyMs": 12.88,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "[SYSTEM] Outbound callback connects to patient.",
+          "toolCount": 1,
+          "tools": [
+            "resumeCall"
+          ],
+          "durationMs": 94,
+          "retellEventLatencyMs": 17.31,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Yes, I still want tomorrow morning.",
+          "toolCount": 3,
+          "tools": [
+            "earliestAvailability",
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 214,
+          "retellEventLatencyMs": 29.45,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "createCallback",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 33.99,
+            "backendLatencyMs": 29.43
+          }
+        },
+        {
+          "name": "resumeCall",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 57.87,
+            "backendLatencyMs": 50.96
+          }
+        },
+        {
+          "name": "earliestAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 72.72,
+            "backendLatencyMs": 26.89
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 41.06,
+            "backendLatencyMs": 41.06
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 57.77,
+            "backendLatencyMs": 25.17
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": true,
+        "sessionResumed": true,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Missed callback resumed and appointment booked."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": true,
+        "sessionResumed": true,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Missed callback resumed and appointment booked."
+      }
+    },
+    {
+      "id": "earliest-slot-across-branches",
+      "name": "Earliest Slot Across Branches",
+      "language": "en",
+      "category": "availability",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 483,
+        "bookingTimeMs": 483,
+        "avgToolLatencyMs": 50.726,
+        "avgBackendLatencyMs": 41.678000000000004,
+        "avgRetellEventLatencyMs": 36.12,
+        "clinikoSyncTimeMs": 65.98
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 483
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "I need the earliest possible appointment at any of your Mumbai branches.",
+          "toolCount": 1,
+          "tools": [
+            "earliestAvailability"
+          ],
+          "durationMs": 111,
+          "retellEventLatencyMs": 36.12,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "My number is 9000011111 and I am Neha Kapoor.",
+          "toolCount": 2,
+          "tools": [
+            "findPatient",
+            "registerPatient"
+          ],
+          "durationMs": 170,
+          "retellEventLatencyMs": 38.87,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Book that earliest Powai slot.",
+          "toolCount": 2,
+          "tools": [
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 123,
+          "retellEventLatencyMs": 33.37,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "earliestAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 59.89,
+            "backendLatencyMs": 59.04
+          }
+        },
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 40.36,
+            "backendLatencyMs": 53.73
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 70.88,
+            "backendLatencyMs": 32.85
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 34.11,
+            "backendLatencyMs": 24.21
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 48.39,
+            "backendLatencyMs": 38.56
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Earliest cross-branch slot at Powai booked."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Earliest cross-branch slot at Powai booked."
+      }
+    },
+    {
+      "id": "reschedule",
+      "name": "Reschedule",
+      "language": "en",
+      "category": "lifecycle",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 364,
+        "bookingTimeMs": null,
+        "avgToolLatencyMs": 38.662,
+        "avgBackendLatencyMs": 35.39,
+        "avgRetellEventLatencyMs": 25.854999999999997,
+        "clinikoSyncTimeMs": 80.55
+      },
+      "metrics": {
+        "turns": 2,
+        "toolCalls": 5,
+        "redundantQuestions": 0,
+        "bookingTimeMs": null
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "I need to reschedule my appointment. Phone 9111222333.",
+          "toolCount": 2,
+          "tools": [
+            "findPatient",
+            "listPatientAppointments"
+          ],
+          "durationMs": 135,
+          "retellEventLatencyMs": 30.33,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Move it to Friday morning instead.",
+          "toolCount": 3,
+          "tools": [
+            "searchAvailability",
+            "holdSlot",
+            "rescheduleAppointment"
+          ],
+          "durationMs": 146,
+          "retellEventLatencyMs": 21.38,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 22.01,
+            "backendLatencyMs": 22.86
+          }
+        },
+        {
+          "name": "listPatientAppointments",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 65.57,
+            "backendLatencyMs": 56.67
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 24.91,
+            "backendLatencyMs": 38.57
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 21.04,
+            "backendLatencyMs": 22.78
+          }
+        },
+        {
+          "name": "rescheduleAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 59.78,
+            "backendLatencyMs": 36.07
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": false,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": true,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment rescheduled to Friday morning."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": false,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": true,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment rescheduled to Friday morning."
+      }
+    },
+    {
+      "id": "cancel",
+      "name": "Cancel",
+      "language": "en",
+      "category": "lifecycle",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 320,
+        "bookingTimeMs": null,
+        "avgToolLatencyMs": 53.53333333333334,
+        "avgBackendLatencyMs": 38.669999999999995,
+        "avgRetellEventLatencyMs": 27.1,
+        "clinikoSyncTimeMs": 84.28
+      },
+      "metrics": {
+        "turns": 2,
+        "toolCalls": 3,
+        "redundantQuestions": 0,
+        "bookingTimeMs": null
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Please cancel my appointment. My phone is 9222333444.",
+          "toolCount": 2,
+          "tools": [
+            "findPatient",
+            "listPatientAppointments"
+          ],
+          "durationMs": 139,
+          "retellEventLatencyMs": 26.32,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Yes, cancel the upcoming one. I am traveling.",
+          "toolCount": 1,
+          "tools": [
+            "cancelAppointment"
+          ],
+          "durationMs": 91,
+          "retellEventLatencyMs": 27.88,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 74.87,
+            "backendLatencyMs": 43.59
+          }
+        },
+        {
+          "name": "listPatientAppointments",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 29.21,
+            "backendLatencyMs": 25.52
+          }
+        },
+        {
+          "name": "cancelAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 56.52,
+            "backendLatencyMs": 46.9
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": false,
+        "appointmentCancelled": true,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment cancelled successfully."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": false,
+        "appointmentCancelled": true,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Appointment cancelled successfully."
+      }
+    },
+    {
+      "id": "double-booking-prevention",
+      "name": "Double Booking Prevention",
+      "language": "en",
+      "category": "safety",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 503,
+        "bookingTimeMs": 503,
+        "avgToolLatencyMs": 49.39833333333333,
+        "avgBackendLatencyMs": 38.156666666666666,
+        "avgRetellEventLatencyMs": 21.703333333333333,
+        "clinikoSyncTimeMs": 82.46
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 6,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 503
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Book slot slot_busy_1 for me. Phone 9333444555, name Vikram Shah.",
+          "toolCount": 4,
+          "tools": [
+            "findPatient",
+            "registerPatient",
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 249,
+          "retellEventLatencyMs": 22.62,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "[CONCURRENT] Another caller tries the same slot.",
+          "toolCount": 1,
+          "tools": [
+            "holdSlot"
+          ],
+          "durationMs": 66,
+          "retellEventLatencyMs": 10.28,
+          "notes": "Must not create a second booking"
+        },
+        {
+          "index": 2,
+          "user": "Okay, show me another time.",
+          "toolCount": 1,
+          "tools": [
+            "searchAvailability"
+          ],
+          "durationMs": 93,
+          "retellEventLatencyMs": 32.21,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 27.64,
+            "backendLatencyMs": 55.31
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 46.7,
+            "backendLatencyMs": 46.2
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 63.95,
+            "backendLatencyMs": 18.66
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 66.66,
+            "backendLatencyMs": 51.94
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": false,
+          "latencies": {
+            "toolLatencyMs": 43.75,
+            "backendLatencyMs": 36.6
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 47.69,
+            "backendLatencyMs": 20.23
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": true,
+        "language": "en",
+        "summary": "First booking succeeded; duplicate slot hold blocked."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": true,
+        "language": "en",
+        "summary": "First booking succeeded; duplicate slot hold blocked."
+      }
+    },
+    {
+      "id": "branch-specific-doctor-search",
+      "name": "Branch-specific Doctor Search",
+      "language": "en",
+      "category": "discovery",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 558,
+        "bookingTimeMs": 558,
+        "avgToolLatencyMs": 56.53428571428571,
+        "avgBackendLatencyMs": 37.910000000000004,
+        "avgRetellEventLatencyMs": 16.85,
+        "clinikoSyncTimeMs": 78.96
+      },
+      "metrics": {
+        "turns": 2,
+        "toolCalls": 7,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 558
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Which doctors are available at your Powai branch?",
+          "toolCount": 2,
+          "tools": [
+            "getBranch",
+            "listDoctors"
+          ],
+          "durationMs": 174,
+          "retellEventLatencyMs": 20.5,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Book with Dr. Nair tomorrow. My phone is 9444555666, I am Rohan Desai.",
+          "toolCount": 5,
+          "tools": [
+            "findPatient",
+            "registerPatient",
+            "searchAvailability",
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 294,
+          "retellEventLatencyMs": 13.2,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "getBranch",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 78.44,
+            "backendLatencyMs": 38.27
+          }
+        },
+        {
+          "name": "listDoctors",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 60.95,
+            "backendLatencyMs": 22.71
+          }
+        },
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 23.07,
+            "backendLatencyMs": 24.05
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 71.26,
+            "backendLatencyMs": 31.59
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 77.83,
+            "backendLatencyMs": 57.41
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 26.7,
+            "backendLatencyMs": 57.16
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 57.49,
+            "backendLatencyMs": 34.18
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Booked Dr. Nair at Powai after branch doctor search."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Booked Dr. Nair at Powai after branch doctor search."
+      }
+    },
+    {
+      "id": "stale-availability-refresh",
+      "name": "Stale Availability Refresh",
+      "language": "en",
+      "category": "availability",
+      "passed": true,
+      "failureReason": null,
+      "timing": {
+        "totalMs": 576,
+        "bookingTimeMs": 576,
+        "avgToolLatencyMs": 47.07714285714286,
+        "avgBackendLatencyMs": 25.351428571428574,
+        "avgRetellEventLatencyMs": 34.97,
+        "clinikoSyncTimeMs": 78.95
+      },
+      "metrics": {
+        "turns": 3,
+        "toolCalls": 7,
+        "redundantQuestions": 0,
+        "bookingTimeMs": 576
+      },
+      "turns": [
+        {
+          "index": 0,
+          "user": "Show me slots for tomorrow at Andheri.",
+          "toolCount": 1,
+          "tools": [
+            "searchAvailability"
+          ],
+          "durationMs": 97,
+          "retellEventLatencyMs": 33.93,
+          "notes": null
+        },
+        {
+          "index": 1,
+          "user": "Take the first one. Phone 9555666777, name Meera Joshi.",
+          "toolCount": 3,
+          "tools": [
+            "findPatient",
+            "registerPatient",
+            "holdSlot"
+          ],
+          "durationMs": 219,
+          "retellEventLatencyMs": 35.7,
+          "notes": null
+        },
+        {
+          "index": 2,
+          "user": "Okay, refresh and book the next available.",
+          "toolCount": 3,
+          "tools": [
+            "searchAvailability",
+            "holdSlot",
+            "bookAppointment"
+          ],
+          "durationMs": 177,
+          "retellEventLatencyMs": 35.28,
+          "notes": null
+        }
+      ],
+      "toolResults": [
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 52.08,
+            "backendLatencyMs": 31.35
+          }
+        },
+        {
+          "name": "findPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 35.1,
+            "backendLatencyMs": 36.12
+          }
+        },
+        {
+          "name": "registerPatient",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 49.51,
+            "backendLatencyMs": 34.9
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": false,
+          "latencies": {
+            "toolLatencyMs": 65.49,
+            "backendLatencyMs": 21.47
+          }
+        },
+        {
+          "name": "searchAvailability",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 25.34,
+            "backendLatencyMs": 18.74
+          }
+        },
+        {
+          "name": "holdSlot",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 52.41,
+            "backendLatencyMs": 18.51
+          }
+        },
+        {
+          "name": "bookAppointment",
+          "ok": true,
+          "latencies": {
+            "toolLatencyMs": 49.61,
+            "backendLatencyMs": 16.37
+          }
+        }
+      ],
+      "expectedFinalOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Stale slot rejected; refreshed availability and booked alternate slot."
+      },
+      "actualOutcome": {
+        "status": "SUCCESS",
+        "appointmentBooked": true,
+        "appointmentCancelled": false,
+        "appointmentRescheduled": false,
+        "callbackCreated": false,
+        "sessionResumed": false,
+        "doubleBookingBlocked": false,
+        "language": "en",
+        "summary": "Stale slot rejected; refreshed availability and booked alternate slot."
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+scenario_id,scenario_name,language,category,passed,turns,tool_calls,redundant_questions,total_ms,booking_time_ms,avg_tool_latency_ms,avg_backend_latency_ms,avg_retell_event_latency_ms,cliniko_sync_time_ms,failure_reason
+english-booking,English Booking,en,booking,true,5,5,0,506,506,49.864000000000004,39.827999999999996,29.928000000000004,39.91,
+hindi-booking,Hindi Booking,hi,booking,true,5,5,0,553,553,46.798,40.318,28.664000000000005,107.99,
+mixed-hindi-english-booking,Mixed Hindi-English Booking,mixed,booking,true,5,5,0,501,501,56.80800000000001,31.792,22.418,38.03,
+returning-patient,Returning Patient,en,booking,true,3,4,0,372,372,54.4675,40.1375,24.33666666666667,37.29,
+dropped-call-recovery,Dropped Call Recovery,en,recovery,true,3,3,0,280,280,43.99333333333334,37.17333333333334,19.863333333333333,81.97,
+missed-callback-resume,Missed Callback Resume,en,callback,true,3,5,0,437,437,52.681999999999995,34.702,19.88,56.45,
+earliest-slot-across-branches,Earliest Slot Across Branches,en,availability,true,3,5,0,483,483,50.726,41.678000000000004,36.12,65.98,
+reschedule,Reschedule,en,lifecycle,true,2,5,0,364,,38.662,35.39,25.854999999999997,80.55,
+cancel,Cancel,en,lifecycle,true,2,3,0,320,,53.53333333333334,38.669999999999995,27.1,84.28,
+double-booking-prevention,Double Booking Prevention,en,safety,true,3,6,0,503,503,49.39833333333333,38.156666666666666,21.703333333333333,82.46,
+branch-specific-doctor-search,Branch-specific Doctor Search,en,discovery,true,2,7,0,558,558,56.53428571428571,37.910000000000004,16.85,78.96,
+stale-availability-refresh,Stale Availability Refresh,en,availability,true,3,7,0,576,576,47.07714285714286,25.351428571428574,34.97,78.95,
