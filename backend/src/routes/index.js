@@ -8,6 +8,7 @@ const branchRoutes = require('./branchRoutes');
 const callSessionRoutes = require('./callSessionRoutes');
 const callbackRoutes = require('./callbackRoutes');
 const retellRoutes = require('./retellRoutes');
+const clinikoRoutes = require('./clinikoRoutes');
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use('/api/v1/branches', branchRoutes);
 router.use('/api/v1/call-sessions', callSessionRoutes);
 router.use('/api/v1/callbacks', callbackRoutes);
 router.use('/api/v1/retell', retellRoutes);
+router.use('/api/v1/cliniko', clinikoRoutes);
 
 module.exports = router;
