@@ -206,22 +206,26 @@ function assertDateRange(from, to, errors) {
 }
 
 /**
- * GET /availability
+ * POST /availability — JSON body.
  */
 function validateSearchAvailability(req) {
   const errors = [];
-  const query = req.query || {};
+  const body = req.body;
 
-  const branchId = optionalString(query.branchId, 'branchId', errors, { maxLength: 64 });
-  const doctorId = optionalString(query.doctorId, 'doctorId', errors, { maxLength: 64 });
-  const departmentId = optionalString(query.departmentId, 'departmentId', errors, {
+  if (body == null || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Request body must be a JSON object', value: null };
+  }
+
+  const branchId = optionalString(body.branchId, 'branchId', errors, { maxLength: 64 });
+  const doctorId = optionalString(body.doctorId, 'doctorId', errors, { maxLength: 64 });
+  const departmentId = optionalString(body.departmentId, 'departmentId', errors, {
     maxLength: 64,
   });
-  const clinicId = optionalString(query.clinicId, 'clinicId', errors, { maxLength: 64 });
-  const from = requireIsoDateTime(query.from, 'from', errors);
-  const to = requireIsoDateTime(query.to, 'to', errors);
-  const limit = parseLimit(query.limit, errors);
-  const offset = parseOffset(query.offset, errors);
+  const clinicId = optionalString(body.clinicId, 'clinicId', errors, { maxLength: 64 });
+  const from = requireIsoDateTime(body.from, 'from', errors);
+  const to = requireIsoDateTime(body.to, 'to', errors);
+  const limit = parseLimit(body.limit, errors);
+  const offset = parseOffset(body.offset, errors);
 
   assertDateRange(from, to, errors);
 

@@ -28,6 +28,10 @@ router.post(
   availabilityController.releaseSlot,
 );
 
-router.get('/', validateRequest(validateSearchAvailability), availabilityController.searchAvailability);
+router.post(
+  '/',
+  validateRequest(validateSearchAvailability),
+  availabilityController.searchAvailability,
+);
 
 module.exports = router;
