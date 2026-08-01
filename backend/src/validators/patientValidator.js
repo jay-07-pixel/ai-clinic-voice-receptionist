@@ -89,15 +89,19 @@ function parseIsoDate(value, field, errors) {
 }
 
 /**
- * GET /patients/lookup
+ * POST /patients/lookup — JSON body.
  */
 function validateLookupPatient(req) {
   const errors = [];
-  const query = req.query || {};
+  const body = req.body;
 
-  const phone = optionalString(query.phone, 'phone', errors, { maxLength: 32 });
-  const fullName = optionalString(query.fullName, 'fullName', errors, { maxLength: 200 });
-  const dateOfBirth = parseDateOnly(query.dateOfBirth, 'dateOfBirth', errors);
+  if (body == null || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Request body must be a JSON object', value: null };
+  }
+
+  const phone = optionalString(body.phone, 'phone', errors, { maxLength: 32 });
+  const fullName = optionalString(body.fullName, 'fullName', errors, { maxLength: 200 });
+  const dateOfBirth = parseDateOnly(body.dateOfBirth, 'dateOfBirth', errors);
 
   if (!phone && !fullName) {
     errors.push('At least one of phone or fullName is required');

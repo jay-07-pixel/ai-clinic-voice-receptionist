@@ -71,14 +71,14 @@ Base path: `/api/v1` (except Health).
 
 ### 1.2 Patients
 
-#### `GET /api/v1/patients/lookup`
+#### `POST /api/v1/patients/lookup`
 
 | | |
 | --- | --- |
 | **Purpose** | Returning-patient lookup by phone and/or name |
 | **Auth** | Internal API Key or Admin JWT |
 
-**Request (query)**
+**Request (JSON body)**
 
 ```json
 {

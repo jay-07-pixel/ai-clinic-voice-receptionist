@@ -10,7 +10,11 @@ const {
 
 const router = express.Router();
 
-router.get('/lookup', validateRequest(validateLookupPatient), patientController.lookupPatient);
+router.post(
+  '/lookup',
+  validateRequest(validateLookupPatient),
+  patientController.lookupPatient,
+);
 
 router.post('/', validateRequest(validateCreatePatient), patientController.createPatient);
 
