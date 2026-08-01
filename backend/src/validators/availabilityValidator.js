@@ -66,7 +66,7 @@ function requireString(value, field, errors, { maxLength, minLength } = {}) {
   return trimmed;
 }
 
-function parseIsoDateTime(value, field, errors) {
+function parseIsoDateTime(value, field, errors, { endOfDay = false } = {}) {
   const raw = firstValue(value);
 
   if (raw === undefined || raw === null || raw === '') {
@@ -79,7 +79,7 @@ function parseIsoDateTime(value, field, errors) {
   }
 
   if (DATE_ONLY_RE.test(raw)) {
-    const date = new Date(`${raw}T00:00:00.000Z`);
+    const date = new Date(endOfDay ? `${raw}T23:59:59.999Z` : `${raw}T00:00:00.000Z`);
     if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== raw) {
       errors.push(`${field} must be a valid calendar date`);
       return undefined;
@@ -101,8 +101,8 @@ function parseIsoDateTime(value, field, errors) {
   return date.toISOString();
 }
 
-function requireIsoDateTime(value, field, errors) {
-  const parsed = parseIsoDateTime(value, field, errors);
+function requireIsoDateTime(value, field, errors, options) {
+  const parsed = parseIsoDateTime(value, field, errors, options);
   if (!parsed && !errors.some((e) => e.includes(field))) {
     errors.push(`${field} is required`);
   }
@@ -223,7 +223,7 @@ function validateSearchAvailability(req) {
   });
   const clinicId = optionalString(body.clinicId, 'clinicId', errors, { maxLength: 64 });
   const from = requireIsoDateTime(body.from, 'from', errors);
-  const to = requireIsoDateTime(body.to, 'to', errors);
+  const to = requireIsoDateTime(body.to, 'to', errors, { endOfDay: true });
   const limit = parseLimit(body.limit, errors);
   const offset = parseOffset(body.offset, errors);
 
@@ -254,7 +254,7 @@ function validateEarliestAvailability(req) {
     maxLength: 64,
   });
   const from = requireIsoDateTime(query.from, 'from', errors);
-  const to = requireIsoDateTime(query.to, 'to', errors);
+  const to = requireIsoDateTime(query.to, 'to', errors, { endOfDay: true });
 
   assertDateRange(from, to, errors);
 
