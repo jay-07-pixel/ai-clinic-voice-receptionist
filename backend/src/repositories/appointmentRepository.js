@@ -590,7 +590,9 @@ class AppointmentRepository {
           return { kind: 'idempotent_appointment', appointment: byApptKey };
         }
 
+        console.log('Repository appointmentId:', payload.appointmentId);
         const previous = await this.findById(payload.appointmentId, { tx });
+        console.log('Previous appointment:', previous);
         if (!previous) {
           return { kind: 'not_found' };
         }

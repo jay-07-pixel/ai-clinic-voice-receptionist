@@ -25,6 +25,11 @@ const getAppointment = asyncHandler(async (req, res) => {
 });
 
 const rescheduleAppointment = asyncHandler(async (req, res) => {
+  console.log('=== RESCHEDULE REQUEST ===');
+  console.log('req.params:', req.params);
+  console.log('req.body:', req.body);
+  console.log('req.validated:', req.validated);
+
   const result = await appointmentService.rescheduleAppointment(req.validated);
   return sendSuccess(res, {
     previousAppointment: result.previousAppointment,
