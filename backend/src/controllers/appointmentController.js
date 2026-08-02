@@ -44,7 +44,10 @@ const cancelAppointment = asyncHandler(async (req, res) => {
 
 const selectAppointment = asyncHandler(async (req, res) => {
   const appointment = await appointmentService.selectAppointment(req.validated);
-  return sendSuccess(res, appointment);
+  return res.status(200).json({
+    success: true,
+    ...appointment,
+  });
 });
 
 module.exports = {
