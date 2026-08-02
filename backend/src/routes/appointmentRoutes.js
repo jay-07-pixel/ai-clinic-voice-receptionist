@@ -20,6 +20,12 @@ router.post(
 router.post('/', validateRequest(validateBookAppointment), appointmentController.bookAppointment);
 
 router.post(
+  '/reschedule',
+  validateRequest(validateRescheduleAppointment),
+  appointmentController.rescheduleAppointment,
+);
+
+router.post(
   '/:appointmentId/reschedule',
   validateRequest(validateRescheduleAppointment),
   appointmentController.rescheduleAppointment,

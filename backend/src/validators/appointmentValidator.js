@@ -150,7 +150,10 @@ function validateGetAppointment(req) {
 }
 
 /**
+ * POST /appointments/reschedule
  * POST /appointments/:appointmentId/reschedule
+ *
+ * appointmentId may come from the JSON body (preferred for Vapi) or the URL path.
  */
 function validateRescheduleAppointment(req) {
   const bodyError = requireBodyObject(req.body);
@@ -161,9 +164,19 @@ function validateRescheduleAppointment(req) {
   const errors = [];
   const body = req.body;
 
-  const appointmentId = requireString(req.params.appointmentId, 'appointmentId', errors, {
+  const fromBody = optionalString(body.appointmentId, 'appointmentId', errors, { maxLength: 64 });
+  const fromParams = optionalString(req.params?.appointmentId, 'appointmentId', errors, {
     maxLength: 64,
   });
+  // Ignore unresolved Vapi path templates like "{{appointmentId}}"
+  const cleanParams =
+    fromParams && !fromParams.includes('{') && !fromParams.includes('}') ? fromParams : undefined;
+  const appointmentId = fromBody || cleanParams;
+
+  if (!appointmentId) {
+    errors.push('appointmentId is required in the request body or URL path');
+  }
+
   const newSlotId = requireString(body.newSlotId, 'newSlotId', errors, { maxLength: 64 });
   const visitReason = optionalString(body.visitReason, 'visitReason', errors, { maxLength: 500 });
   const callSessionId = optionalString(body.callSessionId, 'callSessionId', errors, {
