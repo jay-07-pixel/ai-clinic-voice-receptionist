@@ -6,9 +6,16 @@ const {
   validateGetAppointment,
   validateRescheduleAppointment,
   validateCancelAppointment,
+  validateSelectAppointment,
 } = require('../validators/appointmentValidator');
 
 const router = express.Router();
+
+router.post(
+  '/select',
+  validateRequest(validateSelectAppointment),
+  appointmentController.selectAppointment,
+);
 
 router.post('/', validateRequest(validateBookAppointment), appointmentController.bookAppointment);
 

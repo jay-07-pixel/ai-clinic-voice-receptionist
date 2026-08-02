@@ -9,6 +9,7 @@ const {
   toAppointmentBookResponse,
   toAppointmentCancelResponse,
   toPreviousAppointmentSummary,
+  toAppointmentSelectResponse,
 } = require('../mappers/appointmentMapper');
 
 class AppointmentService {
@@ -33,6 +34,22 @@ class AppointmentService {
     }
 
     return toAppointmentResponse(appointment);
+  }
+
+  async selectAppointment(dto) {
+    await this.#assertPatientExists(dto.patientId);
+
+    const appointment = await this.appointmentRepository.selectAppointment({
+      patientId: dto.patientId,
+      doctorName: dto.doctorName,
+      startsAt: dto.startsAt,
+    });
+
+    if (!appointment) {
+      throw new AppError('Appointment not found', 404, { code: 'NOT_FOUND' });
+    }
+
+    return toAppointmentSelectResponse(appointment);
   }
 
   async bookAppointment(dto) {

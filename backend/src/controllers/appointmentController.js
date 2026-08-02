@@ -42,9 +42,15 @@ const cancelAppointment = asyncHandler(async (req, res) => {
   return sendSuccess(res, { appointment: result.appointment });
 });
 
+const selectAppointment = asyncHandler(async (req, res) => {
+  const appointment = await appointmentService.selectAppointment(req.validated);
+  return sendSuccess(res, appointment);
+});
+
 module.exports = {
   bookAppointment,
   getAppointment,
   rescheduleAppointment,
   cancelAppointment,
+  selectAppointment,
 };

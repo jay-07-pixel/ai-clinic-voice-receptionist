@@ -68,6 +68,46 @@ class AppointmentRepository {
     });
   }
 
+  /**
+   * Select one appointment by patient + doctor name + startsAt.
+   */
+  async selectAppointment({ patientId, doctorName, startsAt }) {
+    if (!patientId || !doctorName || !startsAt) {
+      return null;
+    }
+
+    return this.prisma.appointment.findFirst({
+      where: {
+        patientId,
+        deletedAt: null,
+        startsAt: new Date(startsAt),
+        doctor: {
+          is: {
+            displayName: {
+              contains: doctorName,
+              mode: 'insensitive',
+            },
+          },
+        },
+      },
+      select: {
+        ...APPOINTMENT_SELECT,
+        doctor: {
+          select: {
+            displayName: true,
+            firstName: true,
+            lastName: true,
+          },
+        },
+        branch: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+  }
+
   async findByIdempotencyKey(idempotencyKey, { tx } = {}) {
     if (!idempotencyKey) {
       return null;

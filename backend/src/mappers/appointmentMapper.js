@@ -85,10 +85,33 @@ function toPreviousAppointmentSummary(appointment) {
   };
 }
 
+function toAppointmentSelectResponse(appointment) {
+  if (!appointment) {
+    return null;
+  }
+
+  const doctorName =
+    appointment.doctor?.displayName ||
+    [appointment.doctor?.firstName, appointment.doctor?.lastName].filter(Boolean).join(' ') ||
+    null;
+
+  return {
+    appointmentId: appointment.id,
+    slotId: appointment.slotId,
+    doctorId: appointment.doctorId,
+    branchId: appointment.branchId,
+    doctorName,
+    branchName: appointment.branch?.name ?? null,
+    startsAt: toIsoDateTime(appointment.startsAt),
+    status: appointment.status,
+  };
+}
+
 module.exports = {
   toAppointmentResponse,
   toAppointmentBookResponse,
   toAppointmentCancelResponse,
   toPreviousAppointmentSummary,
+  toAppointmentSelectResponse,
   toIsoDateTime,
 };

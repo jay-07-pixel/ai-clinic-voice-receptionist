@@ -233,9 +233,57 @@ function validateCancelAppointment(req) {
   };
 }
 
+function requireIsoDateTime(value, field, errors) {
+  const raw = firstValue(value);
+
+  if (!isNonEmptyString(raw)) {
+    errors.push(`${field} is required`);
+    return undefined;
+  }
+
+  const date = new Date(raw.trim());
+  if (Number.isNaN(date.getTime())) {
+    errors.push(`${field} must be a valid ISO datetime`);
+    return undefined;
+  }
+
+  return date.toISOString();
+}
+
+/**
+ * POST /appointments/select
+ */
+function validateSelectAppointment(req) {
+  const bodyError = requireBodyObject(req.body);
+  if (bodyError) {
+    return { error: bodyError, value: null };
+  }
+
+  const errors = [];
+  const body = req.body;
+
+  const patientId = requireString(body.patientId, 'patientId', errors, { maxLength: 64 });
+  const doctorName = requireString(body.doctorName, 'doctorName', errors, { maxLength: 200 });
+  const startsAt = requireIsoDateTime(body.startsAt, 'startsAt', errors);
+
+  if (errors.length > 0) {
+    return { error: errors.join('; '), value: null };
+  }
+
+  return {
+    error: null,
+    value: {
+      patientId,
+      doctorName,
+      startsAt,
+    },
+  };
+}
+
 module.exports = {
   validateBookAppointment,
   validateGetAppointment,
   validateRescheduleAppointment,
   validateCancelAppointment,
+  validateSelectAppointment,
 };
