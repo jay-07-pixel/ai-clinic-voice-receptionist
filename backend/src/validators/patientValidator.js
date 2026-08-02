@@ -238,9 +238,42 @@ function validateListPatientAppointments(req) {
   };
 }
 
+/**
+ * POST /patients/:patientId/appointments/find — JSON body.
+ * Resolve exactly one appointment by appointmentId and/or doctorName.
+ */
+function validateFindPatientAppointment(req) {
+  const errors = [];
+  const patientId = requireString(req.params.patientId, 'patientId', errors, { maxLength: 64 });
+  const body = req.body;
+
+  if (body == null || typeof body !== 'object' || Array.isArray(body)) {
+    return { error: 'Request body must be a JSON object', value: null };
+  }
+
+  const appointmentId = optionalString(body.appointmentId, 'appointmentId', errors, {
+    maxLength: 64,
+  });
+  const doctorName = optionalString(body.doctorName, 'doctorName', errors, { maxLength: 200 });
+
+  if (!appointmentId && !doctorName) {
+    errors.push('At least one of appointmentId or doctorName is required');
+  }
+
+  if (errors.length > 0) {
+    return { error: errors.join('; '), value: null };
+  }
+
+  return {
+    error: null,
+    value: { patientId, appointmentId, doctorName },
+  };
+}
+
 module.exports = {
   validateLookupPatient,
   validateCreatePatient,
   validateGetPatient,
   validateListPatientAppointments,
+  validateFindPatientAppointment,
 };

@@ -287,6 +287,46 @@ class PatientRepository {
   }
 
   /**
+   * Resolve a single appointment for a patient by id and/or doctor display name.
+   * Returns matching rows (caller enforces exactly-one semantics).
+   */
+  async findAppointmentsForPatient(patientId, { appointmentId, doctorName } = {}) {
+    if (!patientId) {
+      return [];
+    }
+
+    const where = {
+      patientId,
+      deletedAt: null,
+    };
+
+    if (appointmentId) {
+      where.id = appointmentId;
+    } else {
+      where.status = { in: [...ACTIVE_APPOINTMENT_STATUSES] };
+      where.startsAt = { gte: new Date() };
+    }
+
+    if (doctorName) {
+      where.doctor = {
+        is: {
+          displayName: {
+            contains: doctorName,
+            mode: 'insensitive',
+          },
+        },
+      };
+    }
+
+    return this.prisma.appointment.findMany({
+      where,
+      select: APPOINTMENT_SUMMARY_SELECT,
+      orderBy: { startsAt: 'asc' },
+      take: 10,
+    });
+  }
+
+  /**
    * @param {unknown} error
    * @param {string} [targetField]
    */

@@ -6,6 +6,7 @@ const {
   validateCreatePatient,
   validateGetPatient,
   validateListPatientAppointments,
+  validateFindPatientAppointment,
 } = require('../validators/patientValidator');
 
 const router = express.Router();
@@ -17,6 +18,12 @@ router.post(
 );
 
 router.post('/', validateRequest(validateCreatePatient), patientController.createPatient);
+
+router.post(
+  '/:patientId/appointments/find',
+  validateRequest(validateFindPatientAppointment),
+  patientController.findPatientAppointment,
+);
 
 router.get(
   '/:patientId/appointments',

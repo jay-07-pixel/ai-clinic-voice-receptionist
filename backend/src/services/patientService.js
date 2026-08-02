@@ -165,6 +165,49 @@ class PatientService {
     };
   }
 
+  /**
+   * Resolve exactly one appointment for cancel/reschedule flows.
+   * Soft-miss returns found:false (HTTP 200). Multiple doctorName matches → 409.
+   */
+  async findPatientAppointment(patientId, { appointmentId, doctorName } = {}) {
+    const patient = await this.patientRepository.findById(patientId);
+
+    if (!patient) {
+      throw new AppError('Patient not found', 404, { code: 'NOT_FOUND' });
+    }
+
+    const matches = await this.patientRepository.findAppointmentsForPatient(patientId, {
+      appointmentId,
+      doctorName,
+    });
+
+    if (matches.length === 0) {
+      return {
+        found: false,
+        appointment: null,
+      };
+    }
+
+    if (matches.length > 1) {
+      throw new AppError(
+        'Multiple appointments match; provide appointmentId to select one',
+        409,
+        {
+          code: 'CONFLICT',
+          details: {
+            matchCount: matches.length,
+            appointmentIds: matches.map((a) => a.id),
+          },
+        },
+      );
+    }
+
+    return {
+      found: true,
+      appointment: toAppointmentSummary(matches[0]),
+    };
+  }
+
   #found(patient, matchConfidence) {
     return {
       found: true,
