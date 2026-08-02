@@ -180,10 +180,12 @@ Recommended voice contract: always `200` with `found: true|false` to avoid tool 
 
 | | |
 | --- | --- |
-| **Purpose** | List upcoming / recent appointments for a patient |
+| **Purpose** | List active/upcoming appointments for a patient (voice cancel/reschedule) |
 | **Auth** | Internal API Key or Admin JWT |
 
-**Query:** `status`, `from`, `to`, `limit`  
+**Query:** `status`, `from`, `to`, `limit`
+
+Default (no query filters): `PENDING`/`CONFIRMED` with `startsAt >= now`, ordered ascending.
 
 **Response `200`**
 
@@ -191,7 +193,19 @@ Recommended voice contract: always `200` with `found: true|false` to avoid tool 
 {
   "success": true,
   "data": {
-    "appointments": []
+    "appointments": [
+      {
+        "appointmentId": "clappt...",
+        "doctorId": "cldoc...",
+        "doctorName": "Dr. Ananya Sharma",
+        "branchId": "clbranch...",
+        "branchName": "Andheri Branch",
+        "slotId": "clslot...",
+        "startsAt": "2026-08-03T11:30:00.000Z",
+        "endsAt": "2026-08-03T12:00:00.000Z",
+        "status": "CONFIRMED"
+      }
+    ]
   }
 }
 ```

@@ -3,6 +3,8 @@ const { prisma } = require('../config/database');
 
 const NOT_DELETED = { deletedAt: null };
 
+const ACTIVE_APPOINTMENT_STATUSES = Object.freeze(['PENDING', 'CONFIRMED']);
+
 const APPOINTMENT_SUMMARY_SELECT = Object.freeze({
   id: true,
   status: true,
@@ -16,6 +18,16 @@ const APPOINTMENT_SUMMARY_SELECT = Object.freeze({
   visitReason: true,
   createdAt: true,
   updatedAt: true,
+  doctor: {
+    select: {
+      displayName: true,
+    },
+  },
+  branch: {
+    select: {
+      name: true,
+    },
+  },
 });
 
 class PatientRepository {
@@ -234,6 +246,10 @@ class PatientRepository {
     }
   }
 
+  /**
+   * Lists appointments for a patient.
+   * Default (no status/from/to): active upcoming only (PENDING|CONFIRMED, startsAt >= now).
+   */
   async listAppointmentsByPatientId(patientId, { status, from, to, limit = 20 } = {}) {
     if (!patientId) {
       return [];
@@ -246,6 +262,8 @@ class PatientRepository {
 
     if (status) {
       where.status = status;
+    } else {
+      where.status = { in: [...ACTIVE_APPOINTMENT_STATUSES] };
     }
 
     if (from || to) {
@@ -256,12 +274,14 @@ class PatientRepository {
       if (to) {
         where.startsAt.lte = new Date(to);
       }
+    } else if (!status || ACTIVE_APPOINTMENT_STATUSES.includes(status)) {
+      where.startsAt = { gte: new Date() };
     }
 
     return this.prisma.appointment.findMany({
       where,
       select: APPOINTMENT_SUMMARY_SELECT,
-      orderBy: { startsAt: 'desc' },
+      orderBy: { startsAt: 'asc' },
       take: limit,
     });
   }

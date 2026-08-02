@@ -74,11 +74,14 @@ function toAppointmentSummary(appointment) {
   }
 
   return {
+    appointmentId: appointment.id,
     id: appointment.id,
     status: appointment.status,
     source: appointment.source,
     doctorId: appointment.doctorId,
+    doctorName: appointment.doctor?.displayName ?? null,
     branchId: appointment.branchId,
+    branchName: appointment.branch?.name ?? null,
     departmentId: appointment.departmentId ?? null,
     slotId: appointment.slotId,
     startsAt: toIsoDateTime(appointment.startsAt),
