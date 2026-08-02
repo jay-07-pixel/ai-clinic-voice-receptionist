@@ -1,5 +1,6 @@
 const { Prisma } = require('@prisma/client');
 const { prisma } = require('../config/database');
+const config = require('../config');
 const {
   ACTIVE_APPOINTMENT_STATUSES,
   DEFAULT_CANCEL_WINDOW_HOURS,
@@ -645,12 +646,12 @@ class AppointmentRepository {
           return { kind: 'same_slot', appointment: previous };
         }
 
-        const settings = await this.getClinicSettingsForBranch(previous.branchId, { tx });
-        if (!this.#isWithinPolicyWindow(previous.startsAt, settings.rescheduleWindowHours, now)) {
+        const rescheduleWindowHours = config.rescheduleWindowHours;
+        if (!this.#isWithinPolicyWindow(previous.startsAt, rescheduleWindowHours, now)) {
           return {
             kind: 'policy_violation',
             appointment: previous,
-            windowHours: settings.rescheduleWindowHours,
+            windowHours: rescheduleWindowHours,
           };
         }
 
@@ -806,6 +807,12 @@ class AppointmentRepository {
     }
 
     const hours = Number.isInteger(windowHours) ? windowHours : DEFAULT_CANCEL_WINDOW_HOURS;
+
+    // 0 disables the minimum lead-time policy (dev/demo).
+    if (hours === 0) {
+      return true;
+    }
+
     const deadline = startMs - hours * 60 * 60 * 1000;
     return now.getTime() <= deadline;
   }

@@ -1,5 +1,14 @@
 require('dotenv').config();
 
+function parseNonNegativeInt(value, fallback) {
+  if (value === undefined || value === null || value === '') {
+    return fallback;
+  }
+
+  const parsed = Number.parseInt(String(value), 10);
+  return Number.isInteger(parsed) && parsed >= 0 ? parsed : fallback;
+}
+
 const config = {
   env: process.env.NODE_ENV || 'development',
   port: parseInt(process.env.PORT, 10) || 3000,
@@ -7,6 +16,11 @@ const config = {
   corsOrigin: process.env.CORS_ORIGIN || '*',
   logLevel: process.env.LOG_LEVEL || 'info',
   isProduction: process.env.NODE_ENV === 'production',
+  /**
+   * Minimum hours before appointment start required to allow reschedule.
+   * 0 disables the reschedule policy check (useful for local/demo).
+   */
+  rescheduleWindowHours: parseNonNegativeInt(process.env.RESCHEDULE_WINDOW_HOURS, 24),
   retell: {
     apiKey: process.env.RETELL_API_KEY || '',
     skipSignatureVerify:
